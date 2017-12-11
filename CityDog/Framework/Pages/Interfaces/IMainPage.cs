@@ -10,6 +10,7 @@ namespace Framework.Pages.Interfaces
     {
         ArticlePage OpenArticle(int articleNumber);
         ArticlePage OpenArticleOfDay();
+        ArticlePage OpenArticle();
         Page OpenSection(Sections sectionName);
         Page OpenSubsection(Subsections subsectionName);
         void OpenSocialNetwork(SocialNetwork socialNetworkName);

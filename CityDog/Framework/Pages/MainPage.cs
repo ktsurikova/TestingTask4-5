@@ -9,11 +9,14 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Framework.Logging;
 
 namespace Framework.Pages
 {
     public class MainPage : Page, IMainPage
     {
+        private readonly ILogger _logger = new NLogger();
+        
         [FindsBy(How = How.XPath, Using = PageLocators.AllArticlesXpath)]
         public IList<IWebElement> AllArticles;
 
@@ -38,9 +41,19 @@ namespace Framework.Pages
             throw new NotImplementedException();
         }
 
+        public ArticlePage OpenArticle()
+        {
+            _logger.Debug(DateTime.Now, "artical of day clicked");
+            Random rnd = new Random();           
+            AllArticles[rnd.Next(1, AllArticles.Count)].Click();
+
+            return new ArticlePage();
+        }
+
         public Page OpenSection(Sections sectionName)
         {
             GetSectionHref(sectionName).Click();
+            _logger.Debug(DateTime.Now, $"{sectionName} clicked");
 
             switch (sectionName)
             {
@@ -48,7 +61,8 @@ namespace Framework.Pages
                     return new WhereToGoPage();
 
                 default:
-                    throw new NotImplementedException();
+                    _logger.Error(DateTime.Now, $"not supported {sectionName}");
+                    throw new NotSupportedException();
             }
         }
 
@@ -82,6 +96,7 @@ namespace Framework.Pages
 
         public ArticlePage OpenArticleOfDay()
         {
+            _logger.Debug(DateTime.Now, "artical of day clicked");
             ArticleOfDay.Click();
 
             return new ArticlePage();
@@ -107,10 +122,12 @@ namespace Framework.Pages
                     break;
 
                 default:
-                    throw new NotImplementedException();
+                    _logger.Error(DateTime.Now, $"not supported {sectionName}");
+                    throw new NotSupportedException();
             }
 
-            string hrefXpath = String.Format(@"//div[@class='menuBlock']/ul[contains(@class, 'mainMenu ')]//a[contains(text(), '{0}')]", urlPart);
+            string hrefXpath =
+                $@"//div[@class='menuBlock']/ul[contains(@class, 'mainMenu ')]//a[contains(text(), '{urlPart}')]";
             return Driver.FindElement(By.XPath(hrefXpath));
         }
 

@@ -7,14 +7,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Framework.Logging;
 
 namespace Framework.Pages
 {
     public class WhereToGoPage : Page, IWhereToGo
     {
+        private readonly ILogger _logger = new NLogger();
+
         [FindsBy(How = How.XPath, Using = PageLocators.AllEventsXpath)]
         public IList<IWebElement> AllEvents;
-
 
         public WhereToGoPage()
         {
@@ -32,6 +34,7 @@ namespace Framework.Pages
 
         public WhereToGoPage SelectEventType(Events eventName)
         {
+            _logger.Debug(DateTime.Now, $"href {eventName} clicked");
             GetHref(eventName).Click();
 
             return new WhereToGoPage();
@@ -55,10 +58,11 @@ namespace Framework.Pages
                     break;
 
                 default:
-                    throw new NotImplementedException();
+                    _logger.Error(DateTime.Now, $"not supported {eventName}");
+                    throw new NotSupportedException();
             }
 
-            string xpath = String.Format(@"//ul[contains(@class, 'afishaMain-categories')]/li/a[text()='{0}']", eventText);
+            string xpath = $@"//ul[contains(@class, 'afishaMain-categories')]/li/a[text()='{eventText}']";
 
             return Driver.FindElement(By.XPath(xpath));
         }

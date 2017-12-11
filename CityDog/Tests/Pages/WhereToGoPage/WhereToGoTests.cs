@@ -30,6 +30,12 @@ namespace Tests.WhereToGoPageTests
 
 
         [Test]
+        public void NotImplementEventType()
+        {
+            Assert.Throws<NotSupportedException>(() => _whereToGoPage.SelectEventType(Events.DoggyChoice));
+        }
+
+        [Test]
         public void TodayEventsExist()
         {
             _whereToGoPage.SelectEventType(Events.Today);
