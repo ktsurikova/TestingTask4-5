@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Framework;
+using Framework.Logging;
+using OpenQA.Selenium.Support.Events;
 
 namespace Tests.WhereToGoPageTests
 {
@@ -12,7 +15,6 @@ namespace Tests.WhereToGoPageTests
     public class WhereToGoTests
     {
         private WhereToGoPage _whereToGoPage;
-
 
         [SetUp]
         public void SetUpMethods()

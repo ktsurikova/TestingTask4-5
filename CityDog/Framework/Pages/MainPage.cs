@@ -10,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Framework.Logging;
+using OpenQA.Selenium.Support.Events;
 
 namespace Framework.Pages
 {
     public class MainPage : Page, IMainPage
     {
         private readonly ILogger _logger = new NLogger();
-        
+
         [FindsBy(How = How.XPath, Using = PageLocators.AllArticlesXpath)]
         public IList<IWebElement> AllArticles;
 
@@ -34,7 +35,6 @@ namespace Framework.Pages
         {
             PageFactory.InitElements(Driver, this);
         }
-
 
         public ArticlePage OpenArticle(int articleNumber)
         {
@@ -110,6 +110,11 @@ namespace Framework.Pages
 
 
         #region Private Methods
+
+        private void EventFiringWebDriverOnElementClicking(object sender, WebElementEventArgs webElementEventArgs)
+        {
+            _logger.Debug(DateTime.Now, sender.ToString(), webElementEventArgs.Element.TagName + "clicking");
+        }
 
         private IWebElement GetSectionHref(Sections sectionName)
         {
